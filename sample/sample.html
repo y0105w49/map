@@ -1,6 +1,5 @@
-
 <div id = "map"> </div>
-
+<button onclick="getLocation()">Get Location</button>
 <head> 
 	<link rel="stylesheet" href="leaflet/leaflet.css"/>
 	<script type="text/javascript" src="leaflet/leaflet.js"></script>
@@ -11,13 +10,13 @@
 	}
 	</style>
 	<script type="text/javascript">
-	var map = L.map('map').setView([43.475906,-80.541286],50);
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map); 
-	var marker = L.marker([43.4666,-80.5166]).addTo(map);
+	var map = L.map('map').setView([43.4705876,-80.5550397],17);
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map); 
+	//var marker = L.marker([43.4705876,-80.5550397]).addTo(map);
+	var marker = L.marker([43.4705876,-80.5550397]).addTo(map);
 	marker.bindPopup("Hello Antonio").openPopup();
-	
 	</script>
+
 	<script>
 		var x = document.getElementById("demo");
 		function getLocation() {
