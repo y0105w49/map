@@ -1,5 +1,7 @@
 <div id = "map"> </div>
 <button onclick="getLocation()">Get Location</button>
+
+<button onclick="pantoREV()">Pan to REV</button>
 <head> 
 	<link rel="stylesheet" href="leaflet/leaflet.css"/>
 	<script type="text/javascript" src="leaflet/leaflet.js"></script>
@@ -14,7 +16,15 @@
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map); 
 	//var marker = L.marker([43.4705876,-80.5550397]).addTo(map);
 	var marker = L.marker([43.4705876,-80.5550397]).addTo(map);
+	var circle = L.circle([43.4701088, -80.5540204], 130, {
+    color: 'orange',
+    fillColor: '#f60',
+    fillOpacity: 0.2}).addTo(map);
+	circle.bindPopup("Ron Eydt Village");
 	marker.bindPopup("Hello Antonio").openPopup();
+		function pantoREV(){
+			map.panTo(new L.LatLng(43.4701088, -80.5540204));
+		}
 	</script>
 
 	<script>
@@ -27,8 +37,8 @@
    		 }
 		}
 		function showPosition(position) {
-    		x.innerHTML = "Latitude: " + position.coords.latitude + 
-    		"<br>Longitude: " + position.coords.longitude; 
+    		alert("Latitude: " + position.coords.latitude + 
+    		"<br>Longitude: " + position.coords.longitude); 
 		}
 	</script>
 </head>
