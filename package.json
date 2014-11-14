@@ -1,7 +1,8 @@
 {
-    "name": "map",
-    "main": "main.js",
-    "dependencies" : {
-        "node-static" : "latest"
-    }
+  "name": "map",
+  "main": "main.js",
+  "dependencies": {
+    "node-static": "latest",
+    "socket.io": "~1.2.0"
+  }
 }

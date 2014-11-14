@@ -6,6 +6,8 @@ var sys = require('sys'),
 
 var port = process.env.PORT || 7070
 
+var io = require('socket.io')(http);
+
 http.createServer(function(req,res) {
     sys.puts(req.url + ' is being requested');
     if (req.url=='/') req.url='/sample.html';
@@ -16,5 +18,17 @@ http.createServer(function(req,res) {
 //    res.write("Bonjour, monde");
 //    res.end();
 }).listen(port);
+
+//Initialize a new Socket.IO connection
+io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('user', function(user){
+        console.log('user: ' + user);
+        io.emit('user', user);
+    });
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+});
 
 sys.puts("Server running on " + port);
