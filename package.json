@@ -1,0 +1,7 @@
+{
+    "name": "map",
+    "main": "main.js",
+    "dependencies" : {
+        "node-static" : "latest"
+    }
+}

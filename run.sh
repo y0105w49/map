@@ -4,6 +4,8 @@ export PATH=/usr/local/bin:$PATH
 
 forever stop main.js
 
+npm install
+
 export OUTLOG=./logs/node-log.txt
 export ERRLOG=./logs/node-error-log.txt
 #export FOREVERLOG=./logs/forever-log.txt
