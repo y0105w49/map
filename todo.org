@@ -1,0 +1,5 @@
+* scripts
+** forever
+*** in package.json
+*** use forever-monitor to run app.js programatically
+*** switch to ./run.js that #!/...node and +x and uses forever-monitor

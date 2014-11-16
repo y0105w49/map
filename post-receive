@@ -1,0 +1,3 @@
+#!/bin/sh
+git --work-tree=/var/map/site --git-dir=/var/map/repo/live.git checkout -f
+cd /var/map/site && /var/map/site/run.sh

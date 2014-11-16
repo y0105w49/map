@@ -1,21 +1,21 @@
 extends layout
 block scripts
+  meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
   link(rel='stylesheet', href='leaflet/leaflet.css')
   script(type='text/javascript', src='leaflet/leaflet.js')
   title='Locus2'
   style.
     #map { height:500px; margin: 0 auto;}
-    #controls { margin: 0 auto; }
 block content
   #map
   script(type='text/javascript', src='sample.js')
   #controls
-    button(id='control', onclick='update()') Update
-    button(id='control', onclick='pantoREV()') Pan to REV
-    button(id='control', onclick='addMarker()') Add Custom Marker
+    button(type='button', class='btn btn-default', onclick='update()') Update
+    button(type='button', class='btn btn-default', onclick='pantoREV()') Pan to REV
+    button(type='button', class='btn btn-default', onclick='getmyLocation()') Add Custom Marker
   p Name:
     input(type='text', id='name', value='')
-  p Lat: 
+  p Lat:
   input(type='text', id='latitude', size="32", value='', disabled)
   p Long:
   input(type='text', id='longitude', size="32", value='', disabled)
