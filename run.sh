@@ -5,6 +5,7 @@ export PATH=/usr/local/bin:$PATH
 forever stop app.js
 
 npm install
+mkdir logs
 
 export OUTLOG=./logs/node-log.txt
 export ERRLOG=./logs/node-error-log.txt

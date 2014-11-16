@@ -1,5 +1,19 @@
 extends layout
-
+block scripts
+  link(rel='stylesheet', href='leaflet/leaflet.css')
+  script(type='text/javascript', src='leaflet/leaflet.js')
+  title='Locus2'
+  style.
+    #map { height:500px; margin: 0 auto;}
+    #controls { margin: 0 auto; }
 block content
-  h1= title
-  p Welcome to #{title}
+  #map
+  script(type='text/javascript', src='sample.js')
+  #controls
+    button(id='control', onclick='update()') Update
+    button(id='control', onclick='pantoREV()') Pan to REV
+    button(id='control', onclick='getmyLocation()') Marker to My Location
+  p Name:
+    input(type='text', id='name', value='Antonio3')
+  p Location:
+    input(type='text', id='location', value='')
