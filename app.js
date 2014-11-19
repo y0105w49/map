@@ -23,9 +23,13 @@ app.set('port', process.env.PORT || 7011);
 // socket.io setup
 io.on('connection', function(socket) {
     console.log('a user has connected');
-    socket.on('user', function(user) {
-        console.log('user: ' + user);
-        io.emit('user', user);
+    socket.on('showUser', function(newUser) {
+        console.log('showUser: ' + newUser);
+        io.emit('showUser', newUser);
+    });
+    socket.on('showCustomMarker', function(latlng) {
+        console.log('showCustomMarker: ' + latlng);
+        io.emit('showCustomMarker', latlng);
     });
     socket.on('disconnect', function() {
         console.log('user disconnected');
