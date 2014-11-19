@@ -67,10 +67,12 @@ function getLocation() {
 
 //Listen for new locations from server
 socket.on('user', function(x){
-	var new_user = x;	
-	document.getElementById('log').value += x.name;
-	if(new_user.name != null && new_user.lat != null && new_user.long != null){
-		var new_marker = L.marker([new_user.lat,new_user.long]).addTo(map);
-		new_marker.bindPopup(new_user.name);
+	if (x.name != null){
+		var new_user = x;	
+		document.getElementById('log').value += x.name;
+		if(new_user.name != null && new_user.lat != null && new_user.long != null){
+			var new_marker = L.marker([new_user.lat,new_user.long]).addTo(map);
+			new_marker.bindPopup(new_user.name);
+		}
 	}
 });
