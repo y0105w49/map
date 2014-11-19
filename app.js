@@ -27,9 +27,9 @@ io.on('connection', function(socket) {
         console.log('showUser: ' + newUser);
         io.emit('showUser', newUser);
     });
-    socket.on('showCustomMarker', function(latlng) {
-        console.log('showCustomMarker: ' + latlng);
-        io.emit('showCustomMarker', latlng);
+    socket.on('updateDroppedMarker', function(data) {
+        console.log('updateDroppedMarker: ' + data);
+        io.emit('updateDroppedMarker', data);
     });
     socket.on('disconnect', function() {
         console.log('user disconnected');

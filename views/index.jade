@@ -12,10 +12,12 @@ block content
   #controls
     button(id='control', onclick='update()') Update
     button(id='control', onclick='pantoREV()') Pan to REV
-    button(id='control', onclick='getmyLocation()') Marker to My Location
+    button(id='control', onclick='addMarker()') Add Custom Marker
   p Name:
     input(type='text', id='name', value='')
-  p Location:
-    input(type='text', id='location', value='')
+  p Lat: 
+  input(type='text', id='latitude', size="32", value='', disabled)
+  p Long:
+  input(type='text', id='longitude', size="32", value='', disabled)
   p Log:
-  input(type='text', size="500" id='log', value='')
+  input(type='text', id='log', size="500", value='')
