@@ -1,4 +1,3 @@
-var x = document.getElementById("demo");
 var user = {"name":"", "lat":"", "long":""};
 var map = L.map('map').setView([43.4705876,-80.5550397],17); //Initialize Map to West D WESST DDDD!
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -32,24 +31,17 @@ function getmyLocation(){
 }
 
 function update(){
-    getLocation();
-    user_name = document.getElementById('name').value; //Fetch user's name from input field
-    marker.bindPopup(user_name);
+	getLocation();
+	user_name = document.getElementById('name').value; //Fetch user's name from input field
+	marker.bindPopup(user_name);
 	socket.emit('user', user_name);
 	user.name = user_name;
 	user.lat = user_lat;
 	user.long = user_long;
-	//document.getElementById('log').value += user.name;
-	if (user_data != null)
-	{
-		socket.emit('user', user);
-	}
-	//send position and name to server
-    //receive other positions and names from server and add to map
+	//document('log').value += user.name;
+	socket.emit('user', user);
 }
 function getPosition(position) {
-    //alert("Latitude: " + position.coords.latitude +
-    //"<br>Longitude: " + position.coords.longitude);
     user_lat = position.coords.latitude;
 	user_long = position.coords.longitude;
 	document.getElementById('location').value = "Lat: " + position.coords.latitude
@@ -64,7 +56,7 @@ function getLocation() {
     }
 }
 //SOCKET IO
-//User data is:
+// User data is:
 //  -> USERNAME,LATITUDE,LONGITUDE
 //Send user data to server
 /*$('#update').click(function(){
@@ -74,7 +66,11 @@ function getLocation() {
 });*/ 
 
 //Listen for new locations from server
-socket.on('user', function(user){
-	document.getElementById('log').value += user.name;	
-		
+socket.on('user', function(x){
+	var new_user = x;	
+	document.getElementById('log').value += x.name;
+	if(new_user.name != null && new_user.lat != null && new_user.long != null){
+		var new_marker = L.marker([new_user.lat,new_user.long]).addTo(map);
+		new_marker.bindPopup(new_user.name);
+	}
 });
