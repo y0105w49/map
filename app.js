@@ -20,6 +20,10 @@ var io = require('socket.io')(http);
 
 app.set('port', process.env.PORT || 7011);
 
+var locs = {}
+
+//io.on(''...)
+
 // socket.io setup
 io.on('connection', function(socket) {
     console.log('a user has connected');

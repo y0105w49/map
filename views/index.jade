@@ -1,4 +1,5 @@
 extends layout
+
 block scripts
   meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
   link(rel='stylesheet', href='leaflet/leaflet.css')
@@ -6,18 +7,21 @@ block scripts
   title='Locus2'
   style.
     #map { height:500px; margin: 0 auto;}
+
 block content
   #map
-  script(type='text/javascript', src='sample.js')
   #controls
     button(type='button', class='btn btn-default', onclick='update()') Update
     button(type='button', class='btn btn-default', onclick='pantoREV()') Pan to REV
     button(type='button', class='btn btn-default', onclick='getmyLocation()') Add Custom Marker
-  p Name:
-    input(type='text', id='name', value='')
-  p Lat:
-  input(type='text', id='latitude', size="32", value='', disabled)
-  p Long:
-  input(type='text', id='longitude', size="32", value='', disabled)
-  p Log:
-  input(type='text', id='log', size="500", value='')
+    //button(type='button', class='btn btn-default', onclick='getmyLocation()') Marker to My Location
+  //form.form-group
+  p Name&nbsp;
+    input(type='text', id='name')
+  p Latitude&nbsp;
+    input(type='text', id='latitude', size='32', disabled)
+  p Longitude&nbsp;
+    input(type='text', id='longitude', size='32', disabled)
+  p Log&nbsp;
+    input(type='text', size="160" id='log')
+  script(type='text/javascript', src='sample.js')
