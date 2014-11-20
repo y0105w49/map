@@ -10,8 +10,8 @@ var bodyParser = require('body-parser');
 var pjson = require('./package.json');
 var debug = require('debug')(pjson.name);
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var defaultRoute = require('./routes/index');
+var usersRoute = require('./routes/users');
 
 var app = express();
 
@@ -24,33 +24,43 @@ var STAY_ALIVE = 1*60*1000;
 var currentUsers = {};
 
 // socket.io setup
-io.on('connection', function(socket) {
-    console.log('a user has connected');
-
-    socket.on('updateLocation', function(data) {
-        console.log('new location: ' + JSON.stringify(data));
-
-        currentUsers[data.name] = { name: data.name, location: data.location, lastSeen: new Date().getTime()};
-
-        console.log('new currentUsers state ' + JSON.stringify(currentUsers));
-
-        console.log('data being sent: ' + JSON.stringify(data));
-        io.emit('updateLocation', data);
-
-        setTimeout(function() {
-            if (new Date().getTime() >= currentUsers[data.name].lastSeen + STAY_ALIVE) {
-                io.emit('userGone', data.name);
-                console.log('removing ' + data.name);
-                delete currentUsers[data.name];
-            }
-        }, STAY_ALIVE);
-    });
+function joinRoom(socket, data) {
+    console.log('user joined room ' + data.room);
+    socket.join(data.room);
+    if (!(data.room in currentUsers)) {
+        currentUsers[data.room]={};
+        console.log(JSON.stringify(currentUsers));
+    }
     console.log('sending initials');
-    for (var u in currentUsers) {
-        var toSend = { name: currentUsers[u].name, location: currentUsers[u].location };
+    for (var u in currentUsers[data.room]) {
+        var toSend = { name: currentUsers[data.room][u].name, location: currentUsers[data.room][u].location };
         console.log(JSON.stringify(toSend));
         socket.emit('updateLocation', toSend);
     }
+}
+
+io.on('connection', function(socket) {
+    console.log('a user has connected');
+
+    socket.on('joinRoom', function(room) {
+        joinRoom(socket, { room: room });
+    });
+
+    socket.on('updateLocation', function(data) {
+        joinRoom(socket,data);
+        console.log('new location: ' + JSON.stringify(data));
+        currentUsers[data.room][data.name] = { name: data.name, location: data.location, lastSeen: new Date().getTime()};
+        console.log('data being sent: ' + JSON.stringify(data));
+        io.to(data.room).emit('updateLocation', data);
+
+        setTimeout(function() {
+            if (new Date().getTime() >= currentUsers[data.room][data.name].lastSeen + STAY_ALIVE) {
+                io.to(data.room).emit('userGone', data.name);
+                console.log('removing ' + data.name);
+                delete currentUsers[data.room][data.name];
+            }
+        }, STAY_ALIVE);
+    });
 
     socket.on('disconnect', function() {
         console.log('user disconnected');
@@ -69,8 +79,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use('/', defaultRoute);
+app.use('/users', usersRoute);
+app.use('/*', defaultRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

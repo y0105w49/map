@@ -12,6 +12,11 @@ var UPDATE_INTERVAL = 20000;
 var NUM_OF_MARKERS = 11;
 var MARKERS_PATH = 'images/markers/marker-icon';
 
+if (room != '/')
+    alert(room);
+
+socket.emit('joinRoom', room);
+
 setInterval(function() {
     user.name = document.getElementById('name').value;
     if(user.name != "" && user.name != null)
@@ -49,7 +54,7 @@ function usePos(pos) {
 	user.name = document.getElementById('name').value;
         user.lat = userLat;
         user.lng = userLng;
-        socket.emit('updateLocation', { name: user.name, location: {lat: user.lat, lng: user.lng }});
+        socket.emit('updateLocation', { room: room, name: user.name, location: {lat: user.lat, lng: user.lng }});
     }
 }
 
