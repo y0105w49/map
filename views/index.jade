@@ -4,7 +4,6 @@ block scripts
   meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
   link(rel='stylesheet', href='leaflet/leaflet.css')
   script(type='text/javascript', src='leaflet/leaflet.js')
-  script(type='text/javascript', src='sample.js')
   title='Locus2'
   style.
     #map { height:500px; margin: 0 auto;}
@@ -13,7 +12,8 @@ block content
   #map
   #controls
     button(type='button', class='btn btn-default', onclick='updateLocation()') Update My Location
-    button(type='button', class='btn btn-default', onclick='pantoREV()') Pan to REV
+    button(type='button', class='btn btn-default', onclick='panToREV()') Pan to REV
+    button(type='button', class='btn btn-default', onclick='panToMe()') Pan to ME!
     button(type='button', class='btn btn-default', onclick='getMyLocation()') Add Custom Marker
   p Name&nbsp;
     input(type='text', id='name')
@@ -23,3 +23,4 @@ block content
     input(type='text', id='longitude', size='32', disabled)
   p Log&nbsp;
     input(type='text', size="160" id='log')
+  script(type='text/javascript', src='sample.js')

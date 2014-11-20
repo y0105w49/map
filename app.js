@@ -18,29 +18,37 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.set('port', process.env.PORT || 7011);
+app.set('port', process.env.PORT || 7003);
 
 var STAY_ALIVE = 10000;
-var users = {}
+var currentUsers = {}
 
 // socket.io setup
 io.on('connection', function(socket) {
     console.log('a user has connected');
 
     socket.on('updateLocation', function(data) {
-        console.log('new location: ' + data);
-        if (users[data.name] == null)
-            users[data.name] = {}
-        users[data.name].location = data.location;
-        users[data.name].lastSeen = new Date().getTime();
-        socket.broadcast.emit('updateLocation', data);
+        console.log('new location: ' + JSON.stringify(data));
+        if (data.name in currentUsers)
+            currentUsers[data.name] = { name: data.name };
+        else
+            currentUsers[data.name] = {};
+        currentUsers[data.name].location = data.location;
+        currentUsers[data.name].lastSeen = new Date().getTime();
+        io.emit('updateLocation', data);
         setTimeout(function() {
-            if (new Date().getTime() >= users[data.name].lastSeen + STAY_ALIVE)
-                socket.broadcast.emit('userGone', data.name);
+            if (new Date().getTime() >= currentUsers[data.name].lastSeen + STAY_ALIVE) {
+                io.emit('userGone', data.name);
+                currentUsers[data.name] = {};
+            }
         }, STAY_ALIVE);
     });
-
-    io.emit('updateAllLocations', locs);
+    console.log('sending initials');
+    for (var u in currentUsers) {
+        var toSend = { name: u.name, location: u.location };
+        console.log(JSON.stringify(toSend));
+        socket.emit('updateLocation', toSend);
+    }
 
     socket.on('disconnect', function() {
         console.log('user disconnected');
