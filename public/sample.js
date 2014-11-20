@@ -17,12 +17,15 @@ function panToMe() {
 }
 
 function updateLocation(){
-    getLocation(function() {
-        user.name = document.getElementById('name').value;
-        user.lat = userLat;
-        user.lng = userLng;
-        socket.emit('updateLocation', { name: user.name, location: {lat: user.lat, lng: user.lng }});
-    });
+	user.name = document.getElementById('name').value;
+	if(user.name != "" && user.name != null){
+		getLocation(function() {
+        	user.name = document.getElementById('name').value;
+        	user.lat = userLat;
+        	user.lng = userLng;
+        	socket.emit('updateLocation', { name: user.name, location: {lat: user.lat, lng: user.lng }});
+    	});
+	}
 }
 
 function getLocation(cb) {
@@ -46,6 +49,13 @@ function addMarker(){
 function markerDropped(e){
     var id = e.target.options.id;
     var latlng = e.target.getLatLng();
+}
+
+function timedUpdate(){
+	setInterval(function() {
+		updateLocation();
+		//TODO add other stuff here if necessary
+	}, 10000);
 }
 
 socket.on('updateLocation', function(newUser){
