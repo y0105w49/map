@@ -8,11 +8,14 @@ var userLat;
 var userLng;
 var markers = {};
 
-var UPDATE_INTERVAL = 10000;
+var UPDATE_INTERVAL = 20000;
 var NUM_OF_MARKERS = 11;
 var MARKERS_PATH = 'images/markers/marker-icon';
+
 setInterval(function() {
-    updateLocation();
+    user.name = document.getElementById('name').value;
+    if(user.name != "" && user.name != null)
+        updateLocation();
     //TODO add other stuff here if necessary
 }, UPDATE_INTERVAL);
 
@@ -27,23 +30,33 @@ function panToMe() {
 function updateLocation(){
     user.name = document.getElementById('name').value;
     if(user.name != "" && user.name != null){
-	getLocation(function() {
-            user.name = document.getElementById('name').value;
-            user.lat = userLat;
-            user.lng = userLng;
-            socket.emit('updateLocation', { name: user.name, location: {lat: user.lat, lng: user.lng }});
-    	});
+	getLocation(usePos);
+    } else {
+        alert('Ya got a name, boy?');
     }
 }
 
-function getLocation(cb) {
+posWatcher = navigator.geolocation.watchPosition(usePos,function (err){}, {});
+
+function usePos(pos) {
+    user.name = document.getElementById('name').value;
+    if(user.name != "" && user.name != null){
+        userLat = pos.coords.latitude;
+        userLng = pos.coords.longitude;
+        document.getElementById('latitude').value = pos.coords.latitude;
+        document.getElementById('longitude').value = pos.coords.longitude;
+
+	user.name = document.getElementById('name').value;
+        user.lat = userLat;
+        user.lng = userLng;
+        socket.emit('updateLocation', { name: user.name, location: {lat: user.lat, lng: user.lng }});
+    }
+}
+
+function getLocation() {
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(function(pos) {
-            userLat = pos.coords.latitude;
-            userLng = pos.coords.longitude;
-            document.getElementById('latitude').value = pos.coords.latitude;
-            document.getElementById('longitude').value = pos.coords.longitude;
-            cb();
+            usePos(pos);
         });
 }
 
