@@ -20,21 +20,28 @@ var io = require('socket.io')(http);
 
 app.set('port', process.env.PORT || 7011);
 
-var locs = {}
-
-//io.on(''...)
+var STAY_ALIVE = 10000;
+var users = {}
 
 // socket.io setup
 io.on('connection', function(socket) {
     console.log('a user has connected');
-    socket.on('showUser', function(newUser) {
-        console.log('showUser: ' + newUser);
-        io.emit('showUser', newUser);
+
+    socket.on('updateLocation', function(data) {
+        console.log('new location: ' + data);
+        if (users[data.name] == null)
+            users[data.name] = {}
+        users[data.name].location = data.location;
+        users[data.name].lastSeen = new Date().getTime();
+        socket.broadcast.emit('updateLocation', data);
+        setTimeout(function() {
+            if (new Date().getTime() >= users[data.name].lastSeen + STAY_ALIVE)
+                socket.broadcast.emit('userGone', data.name);
+        }, STAY_ALIVE);
     });
-    socket.on('updateDroppedMarker', function(data) {
-        console.log('updateDroppedMarker: ' + data);
-        io.emit('updateDroppedMarker', data);
-    });
+
+    io.emit('updateAllLocations', locs);
+
     socket.on('disconnect', function() {
         console.log('user disconnected');
     });
