@@ -20,8 +20,8 @@ var io = require('socket.io')(http);
 
 app.set('port', process.env.PORT || 7003);
 
-var STAY_ALIVE = 100000000;
-var currentUsers = {}
+var STAY_ALIVE = 1*60*1000;
+var currentUsers = {};
 
 // socket.io setup
 io.on('connection', function(socket) {
@@ -34,12 +34,14 @@ io.on('connection', function(socket) {
 
         console.log('new currentUsers state ' + JSON.stringify(currentUsers));
 
+        console.log('data being sent: ' + JSON.stringify(data));
         io.emit('updateLocation', data);
 
         setTimeout(function() {
             if (new Date().getTime() >= currentUsers[data.name].lastSeen + STAY_ALIVE) {
                 io.emit('userGone', data.name);
-                currentUsers[data.name] = {};
+                console.log('removing ' + data.name);
+                delete currentUsers[data.name];
             }
         }, STAY_ALIVE);
     });
