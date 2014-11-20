@@ -8,7 +8,7 @@ var userLat;
 var userLng;
 var markers = {};
 
-var UPDATE_INTERVAL 10000;
+var UPDATE_INTERVAL = 10000;
 
 setInterval(function() {
     updateLocation();
