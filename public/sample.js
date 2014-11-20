@@ -9,7 +9,7 @@ var userLng;
 var markers = {};
 
 var UPDATE_INTERVAL = 10000;
-var NUM_OF_MARKERS = 10;
+var NUM_OF_MARKERS = 11;
 var MARKERS_PATH = 'images/markers/marker-icon';
 setInterval(function() {
     updateLocation();
@@ -64,11 +64,13 @@ socket.on('updateLocation', function(newUser){
         markers[newUser.name].setLatLng(new L.LatLng(newUser.location.lat, newUser.location.lng));
         markers[newUser.name].update();
     } else {
-		var rand = Math.floor((Math.random() * NUM_OF_MARKERS) + 1);
-		var path = MARKERS_PATH + rand + '.png';
-		var markerIcon = L.icon({iconUrl: path, iconSize:[25,41]});
-        var marker = L.marker(new L.LatLng(newUser.location.lat, newUser.location.lng), 
-													{icon: markerIcon}).addTo(map);
+	//var rand = Math.floor((Math.random() * NUM_OF_MARKERS) + 1);
+        var rand = newUser.name.hashCode() % NUM_OF_MARKERS;
+        rand = (rand + NUM_OF_MARKERS) % NUM_OF_MARKERS;
+	var path = MARKERS_PATH + rand + '.png';
+	var markerIcon = L.icon({iconUrl: path, iconSize:[25,41]});
+        var marker = L.marker(new L.LatLng(newUser.location.lat, newUser.location.lng),
+			      {icon: markerIcon}).addTo(map);
         marker.bindPopup(newUser.name).addTo(map);
         markers[newUser.name] = marker;
     }
@@ -78,3 +80,15 @@ socket.on('userGone', function(name) {
     map.removeLayer(markers[name]);
     delete markers[name];
 });
+
+// http://stackoverflow.com/a/7616484
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr, len;
+  if (this.length == 0) return hash;
+  for (i = 0, len = this.length; i < len; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
