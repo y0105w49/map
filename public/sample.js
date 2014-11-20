@@ -9,7 +9,8 @@ var userLng;
 var markers = {};
 
 var UPDATE_INTERVAL = 10000;
-
+var NUM_OF_MARKERS = 10;
+var MARKERS_PATH = 'images/markers/marker-icon';
 setInterval(function() {
     updateLocation();
     //TODO add other stuff here if necessary
@@ -63,7 +64,11 @@ socket.on('updateLocation', function(newUser){
         markers[newUser.name].setLatLng(new L.LatLng(newUser.location.lat, newUser.location.lng));
         markers[newUser.name].update();
     } else {
-        var marker = L.marker(new L.LatLng(newUser.location.lat, newUser.location.lng));
+		var rand = Math.floor((Math.random() * NUM_OF_MARKERS) + 1);
+		var path = MARKERS_PATH + rand + '.png';
+		var markerIcon = L.icon({iconUrl: path, iconSize:[25,41]});
+        var marker = L.marker(new L.LatLng(newUser.location.lat, newUser.location.lng), 
+													{icon: markerIcon}).addTo(map);
         marker.bindPopup(newUser.name).addTo(map);
         markers[newUser.name] = marker;
     }
