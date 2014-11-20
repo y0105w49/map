@@ -20,7 +20,7 @@ var io = require('socket.io')(http);
 
 app.set('port', process.env.PORT || 7003);
 
-var STAY_ALIVE = 10000;
+var STAY_ALIVE = 100000000;
 var currentUsers = {}
 
 // socket.io setup
@@ -29,13 +29,13 @@ io.on('connection', function(socket) {
 
     socket.on('updateLocation', function(data) {
         console.log('new location: ' + JSON.stringify(data));
-        if (data.name in currentUsers)
-            currentUsers[data.name] = { name: data.name };
-        else
-            currentUsers[data.name] = {};
-        currentUsers[data.name].location = data.location;
-        currentUsers[data.name].lastSeen = new Date().getTime();
+
+        currentUsers[data.name] = { name: data.name, location: data.location, lastSeen: new Date().getTime()};
+
+        console.log('new currentUsers state ' + JSON.stringify(currentUsers));
+
         io.emit('updateLocation', data);
+
         setTimeout(function() {
             if (new Date().getTime() >= currentUsers[data.name].lastSeen + STAY_ALIVE) {
                 io.emit('userGone', data.name);
@@ -45,7 +45,7 @@ io.on('connection', function(socket) {
     });
     console.log('sending initials');
     for (var u in currentUsers) {
-        var toSend = { name: u.name, location: u.location };
+        var toSend = { name: currentUsers[u].name, location: currentUsers[u].location };
         console.log(JSON.stringify(toSend));
         socket.emit('updateLocation', toSend);
     }
