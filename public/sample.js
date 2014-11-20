@@ -8,6 +8,11 @@ var userLat;
 var userLng;
 var markers = {};
 
+setInterval(function() {
+		updateLocation();
+		//TODO add other stuff here if necessary
+}, 10000);
+
 function panToREV(){
     map.panTo(new L.LatLng(43.4701088, -80.5540204));
 }
@@ -49,13 +54,6 @@ function addMarker(){
 function markerDropped(e){
     var id = e.target.options.id;
     var latlng = e.target.getLatLng();
-}
-
-function timedUpdate(){
-	setInterval(function() {
-		updateLocation();
-		//TODO add other stuff here if necessary
-	}, 10000);
 }
 
 socket.on('updateLocation', function(newUser){
