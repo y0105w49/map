@@ -8,10 +8,12 @@ var userLat;
 var userLng;
 var markers = {};
 
+var UPDATE_INTERVAL = 10000;
+
 setInterval(function() {
-		updateLocation();
-		//TODO add other stuff here if necessary
-}, 10000);
+    updateLocation();
+    //TODO add other stuff here if necessary
+}, UPDATE_INTERVAL);
 
 function panToREV(){
     map.panTo(new L.LatLng(43.4701088, -80.5540204));
@@ -22,15 +24,15 @@ function panToMe() {
 }
 
 function updateLocation(){
-	user.name = document.getElementById('name').value;
-	if(user.name != "" && user.name != null){
-		getLocation(function() {
-        	user.name = document.getElementById('name').value;
-        	user.lat = userLat;
-        	user.lng = userLng;
-        	socket.emit('updateLocation', { name: user.name, location: {lat: user.lat, lng: user.lng }});
+    user.name = document.getElementById('name').value;
+    if(user.name != "" && user.name != null){
+	getLocation(function() {
+            user.name = document.getElementById('name').value;
+            user.lat = userLat;
+            user.lng = userLng;
+            socket.emit('updateLocation', { name: user.name, location: {lat: user.lat, lng: user.lng }});
     	});
-	}
+    }
 }
 
 function getLocation(cb) {
@@ -64,5 +66,10 @@ socket.on('updateLocation', function(newUser){
         var marker = L.marker(new L.LatLng(newUser.location.lat, newUser.location.lng));
         marker.bindPopup(newUser.name).addTo(map);
         markers[newUser.name] = marker;
-  }
+    }
+});
+
+socket.on('userGone', function(name) {
+    map.removeLayer(markers[name]);
+    delete markers[name];
 });
