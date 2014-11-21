@@ -3,12 +3,13 @@ var map = L.map('map').setView([43.4705876,-80.5550397],17); //Initialize Map to
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',
             { attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
 
-var socket = io();
+//var socket = io.connect(location.origin+'arstarst', { port: PORT, transports: ['websocket'] });
+var socket = io.connect();
 var userLat;
 var userLng;
 var markers = {};
 
-var UPDATE_INTERVAL = 20000;
+var UPDATE_INTERVAL = 2500;
 var NUM_OF_MARKERS = 11;
 var MARKERS_PATH = 'images/markers/marker-icon';
 
@@ -35,13 +36,11 @@ function panToMe() {
 function updateLocation(){
     user.name = document.getElementById('name').value;
     if(user.name != "" && user.name != null){
-	getLocation(usePos);
+	getLocation();
     } else {
         alert('Ya got a name, boy?');
     }
 }
-
-posWatcher = navigator.geolocation.watchPosition(usePos,function (err){}, {});
 
 function usePos(pos) {
     user.name = document.getElementById('name').value;
@@ -56,14 +55,23 @@ function usePos(pos) {
         user.lng = userLng;
         socket.emit('updateLocation', { room: room, name: user.name, location: {lat: user.lat, lng: user.lng }});
     }
+};
+
+function err(err) {
+    console.warn('ERROR ' + err.code + ' ' + err.message);
 }
+
+if (navigator.geolocation && false)
+    posWatcher = navigator.geolocation.watchPosition(function(pos) {
+        usePos(pos);
+    });
 
 function getLocation() {
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(function(pos) {
             usePos(pos);
         });
-}
+};
 
 function addMarker(){
     var markerIcon = L.icon({iconUrl: 'images/drag_marker.png', iconSize:[40,40]});

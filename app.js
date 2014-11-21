@@ -20,7 +20,7 @@ var io = require('socket.io')(http);
 
 app.set('port', process.env.PORT || 7003);
 
-var STAY_ALIVE = 1*60*1000;
+var STAY_ALIVE = 5*60*1000;
 var currentUsers = {};
 
 // socket.io setup
