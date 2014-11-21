@@ -25,17 +25,15 @@ var currentUsers = {};
 
 // socket.io setup
 function joinRoom(socket, data) {
-    console.log('user joined room ' + data.room);
     socket.join(data.room);
     if (!(data.room in currentUsers)) {
         currentUsers[data.room]={};
         console.log(JSON.stringify(currentUsers));
     }
     if (data.sendAll) {
-        console.log('sending initials');
+        console.log('sending fulls to ' + data.name + ' in room ' + data.room);
         for (var u in currentUsers[data.room]) {
             var toSend = { name: currentUsers[data.room][u].name, location: currentUsers[data.room][u].location };
-            console.log(JSON.stringify(toSend));
             socket.emit('updateLocation', toSend);
         }
     }
@@ -49,10 +47,17 @@ io.on('connection', function(socket) {
     });
 
     socket.on('updateLocation', function(data) {
-        joinRoom(socket,data);
-        console.log('new location: ' + JSON.stringify(data));
+        if (!('name'     in data) ||
+            !('room'     in data) ||
+            !('location' in data) ||
+            !('sendAll'  in data)) {
+            console.log('hackers!');
+            console.log(JSON.stringify(data));
+            return;
+        }
+        joinRoom(socket, data);
         currentUsers[data.room][data.name] = { name: data.name, location: data.location, lastSeen: new Date().getTime()};
-        console.log('data being sent: ' + JSON.stringify(data));
+
         io.to(data.room).emit('updateLocation', data);
 
         setTimeout(function() {

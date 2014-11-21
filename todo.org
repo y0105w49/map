@@ -3,3 +3,8 @@
 *** in package.json
 *** use forever-monitor to run app.js programatically
 *** switch to ./run.js that #!/...node and +x and uses forever-monitor
+** updates loc initially, not after one ful delay cycle
+** switch to toggle auto-get-loc, visibility on map
+** new bootstrap row for panTo_, have array of things and things, both auto
+** chatbox below, simple
+** fb login

@@ -10,7 +10,7 @@ var userLng;
 var markers = {};
 
 var UPDATE_INTERVAL = 2500;
-var NUM_OF_MARKERS = 11;
+var NUM_OF_MARKERS = 10;
 var MARKERS_PATH = 'images/markers/marker-icon';
 
 if (room != '/')
@@ -53,7 +53,7 @@ function usePos(pos) {
 	user.name = document.getElementById('name').value;
         user.lat = userLat;
         user.lng = userLng;
-        socket.emit('updateLocation', { room: room, name: user.name, location: {lat: user.lat, lng: user.lng, sendAll: false }});
+        socket.emit('updateLocation', { room: room, name: user.name, location: {lat: user.lat, lng: user.lng }, sendAll: false });
     }
 };
 
@@ -92,12 +92,16 @@ socket.on('updateLocation', function(newUser){
     } else {
 	//var rand = Math.floor((Math.random() * NUM_OF_MARKERS) + 1);
         var rand = newUser.name.hashCode() % NUM_OF_MARKERS;
-        rand = (rand + NUM_OF_MARKERS) % NUM_OF_MARKERS;
+        rand = (rand + NUM_OF_MARKERS) % NUM_OF_MARKERS + 1;
+        if (newUser.name == 'Kyle')
+            rand = '-KYLE'
 	var path = MARKERS_PATH + rand + '.png';
 	var markerIcon = L.icon({
-                                iconUrl: path,
-                                iconSize: [25,41],
-                                iconAnchor: [12, 41]});
+            iconUrl: path,
+            shadowUrl: 'leaflet/images/marker-shadow.png',
+            iconSize: [25,41],
+            iconAnchor: [12, 41],
+            popupAnchor: [0, -45]});
         var marker = L.marker(new L.LatLng(newUser.location.lat, newUser.location.lng),
 			      {icon: markerIcon}).addTo(map);
         marker.bindPopup(newUser.name).addTo(map);

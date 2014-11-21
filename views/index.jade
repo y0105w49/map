@@ -29,7 +29,7 @@ block scripts
       margin-right:-4px;
     }
   script(type='text/javascript', src='leaflet/leaflet.js')
-  title='Locus3'
+  title='Locus2'
   script(type='text/javascript').
     room = '/#{room}'
   - room = '/' + room;
@@ -61,8 +61,8 @@ block content
     .row
       .col-md-12.text-center
         button(type='button', onclick='updateLocation()').btn.btn-default Update My Location
-        &nbsp;
+        | &nbsp;
         button(type='button', onclick='panToREV()').btn.btn-default Pan to REV
-        &nbsp;
+        | &nbsp;
         button(type='button', onclick='panToMe()').btn.btn-default Pan to ME!
-  script(type='text/javascript', src='sample.js')
+  script(type='text/javascript', src='javascripts/main.js')
