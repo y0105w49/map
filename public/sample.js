@@ -95,8 +95,8 @@ socket.on('updateLocation', function(newUser){
         rand = (rand + NUM_OF_MARKERS) % NUM_OF_MARKERS;
 	var path = MARKERS_PATH + rand + '.png';
 	var markerIcon = L.icon({
-                                iconUrl: path, 
-                                iconSize: [25,41]
+                                iconUrl: path,
+                                iconSize: [25,41],
                                 iconAnchor: [12, 41]});
         var marker = L.marker(new L.LatLng(newUser.location.lat, newUser.location.lng),
 			      {icon: markerIcon}).addTo(map);
