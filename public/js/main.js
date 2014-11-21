@@ -10,11 +10,12 @@ var userLng;
 var markers = {};
 
 var UPDATE_INTERVAL = 2500;
+var RESET_ALL_INTERVAL = 2*60*1000;
 var NUM_OF_MARKERS = 10;
 var MARKERS_PATH = 'images/markers/marker-icon';
 
-if (room != '/')
-    alert(room);
+//if (room != '/')
+//    alert(room);
 
 socket.emit('joinRoom', room);
 
@@ -47,8 +48,8 @@ function usePos(pos) {
     if(user.name != "" && user.name != null){
         userLat = pos.coords.latitude;
         userLng = pos.coords.longitude;
-        document.getElementById('latitude').value = pos.coords.latitude;
-        document.getElementById('longitude').value = pos.coords.longitude;
+        document.getElementById('latitude').value = pos.coords.latitude.toFixed(7);
+        document.getElementById('longitude').value = pos.coords.longitude.toFixed(7);
 
 	user.name = document.getElementById('name').value;
         user.lat = userLat;
@@ -98,7 +99,7 @@ socket.on('updateLocation', function(newUser){
 	var path = MARKERS_PATH + rand + '.png';
 	var markerIcon = L.icon({
             iconUrl: path,
-            shadowUrl: 'leaflet/images/marker-shadow.png',
+            shadowUrl: 'images/marker-shadow.png',
             iconSize: [25,41],
             iconAnchor: [12, 41],
             popupAnchor: [0, -45]});

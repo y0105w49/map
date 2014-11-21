@@ -2,7 +2,7 @@ extends layout
 
 block scripts
   meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
-  link(rel='stylesheet', href='leaflet/leaflet.css')
+  link(rel='stylesheet', href='css/leaflet.css')
   style(type='text/css').
     .row {
       margin-top: 15px;
@@ -28,7 +28,7 @@ block scripts
       /* inline-block space fix */
       margin-right:-4px;
     }
-  script(type='text/javascript', src='leaflet/leaflet.js')
+  script(type='text/javascript', src='js/leaflet.js')
   title='Locus2'
   script(type='text/javascript').
     room = '/#{room}'
@@ -65,4 +65,4 @@ block content
         button(type='button', onclick='panToREV()').btn.btn-default Pan to REV
         | &nbsp;
         button(type='button', onclick='panToMe()').btn.btn-default Pan to ME!
-  script(type='text/javascript', src='javascripts/main.js')
+  script(type='text/javascript', src='js/main.js')

@@ -8,3 +8,4 @@
 ** new bootstrap row for panTo_, have array of things and things, both auto
 ** chatbox below, simple
 ** fb login
+** gets full reset periodically
