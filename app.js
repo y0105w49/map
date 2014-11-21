@@ -31,11 +31,13 @@ function joinRoom(socket, data) {
         currentUsers[data.room]={};
         console.log(JSON.stringify(currentUsers));
     }
-    console.log('sending initials');
-    for (var u in currentUsers[data.room]) {
-        var toSend = { name: currentUsers[data.room][u].name, location: currentUsers[data.room][u].location };
-        console.log(JSON.stringify(toSend));
-        socket.emit('updateLocation', toSend);
+    if (data.sendAll) {
+        console.log('sending initials');
+        for (var u in currentUsers[data.room]) {
+            var toSend = { name: currentUsers[data.room][u].name, location: currentUsers[data.room][u].location };
+            console.log(JSON.stringify(toSend));
+            socket.emit('updateLocation', toSend);
+        }
     }
 }
 
@@ -43,7 +45,7 @@ io.on('connection', function(socket) {
     console.log('a user has connected');
 
     socket.on('joinRoom', function(room) {
-        joinRoom(socket, { room: room });
+        joinRoom(socket, { room: room, sendAll: true });
     });
 
     socket.on('updateLocation', function(data) {

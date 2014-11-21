@@ -53,7 +53,7 @@ function usePos(pos) {
 	user.name = document.getElementById('name').value;
         user.lat = userLat;
         user.lng = userLng;
-        socket.emit('updateLocation', { room: room, name: user.name, location: {lat: user.lat, lng: user.lng }});
+        socket.emit('updateLocation', { room: room, name: user.name, location: {lat: user.lat, lng: user.lng, sendAll: false }});
     }
 };
 
