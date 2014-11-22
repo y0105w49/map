@@ -21,10 +21,14 @@ socket.emit('joinRoom', room);
 
 setInterval(function() {
     user.name = document.getElementById('name').value;
-    if(user.name != "" && user.name != null)
+    if(user.name != '' && user.name != null)
         updateLocation();
     //TODO add other stuff here if necessary
 }, UPDATE_INTERVAL);
+
+user.name = document.getElementById('name').value;
+if (user.name != '' && user.name != null)
+    getLocation();
 
 function panToREV(){
     map.panTo(new L.LatLng(43.4701088, -80.5540204));
@@ -97,12 +101,39 @@ socket.on('updateLocation', function(newUser){
         if (newUser.name == 'Kyle')
             rand = '-KYLE'
 	var path = MARKERS_PATH + rand + '.png';
-	var markerIcon = L.icon({
-            iconUrl: path,
-            shadowUrl: 'images/marker-shadow.png',
-            iconSize: [25,41],
-            iconAnchor: [12, 41],
-            popupAnchor: [0, -45]});
+        var markerIcon;
+        if (newUser.name == 'Kevin' || newUser.name == 'fb/kevinsuwala') {
+            path = 'http://graph.facebook.com/jennayzhong/picture?type=square';
+            markerIcon = L.icon({
+                iconUrl: path,
+                iconSize: [50,50],
+                iconAnchor: [25,50],
+                popupAnchor: [0,-54],
+                className: 'img-circle'});
+        } else if (newUser.name == 'Jenny' || newUser.name == 'fb/jennayzhong') {
+            path = 'http://graph.facebook.com/kevinsuwala/picture?type=square';
+            markerIcon = L.icon({
+                iconUrl: path,
+                iconSize: [50,50],
+                iconAnchor: [25,50],
+                popupAnchor: [0,-54],
+                className: 'img-circle'});
+        } else if (newUser.name.substring(0,3) == 'fb/') {
+            path = 'http://graph.facebook.com/' + newUser.name.substring(3,newUser.name.length) + '/picture?type=square';
+            markerIcon = L.icon({
+                iconUrl: path,
+                iconSize: [50,50],
+                iconAnchor: [25,50],
+                popupAnchor: [0,-54],
+                className: 'img-circle'});
+        } else {
+	    markerIcon = L.icon({
+                iconUrl: path,
+                shadowUrl: 'images/marker-shadow.png',
+                iconSize: [25,41],
+                iconAnchor: [12, 41],
+                popupAnchor: [0, -45]});
+        }
         var marker = L.marker(new L.LatLng(newUser.location.lat, newUser.location.lng),
 			      {icon: markerIcon}).addTo(map);
         marker.bindPopup(newUser.name).addTo(map);
