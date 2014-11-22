@@ -60,6 +60,10 @@ block content
           input#longitude(type='text', placeholder='...').form-control
     .row
       .col-md-12.text-center
+        a(href='/auth/facebook').btn.btn-primary
+          span.fa.fa-facebook
+          |  Facebook
+        | &nbsp;
         button(type='button', onclick='updateLocation()').btn.btn-default Update My Location
         | &nbsp;
         button(type='button', onclick='panToREV()').btn.btn-default Pan to REV

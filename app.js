@@ -18,10 +18,29 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
+var configAuth = require('./config/auth');
+
 app.set('port', process.env.PORT || 7003);
 
 var STAY_ALIVE = 5*60*1000;
 var currentUsers = {};
+
+// facebook login
+passport.use(new FacebookStrategy({
+    clientID     : configAuth.facebookAuth.clientID,
+    clientSecret : configAuth.facebookAuth.clientSecret,
+    callbackURL  : configAuth.facebookAuth.callbackURL
+}, function(token, refreshToken, profile, done) {
+    console.log('user ' + profile.id + ' connected');
+    done();
+}));
+
+app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', {sucessRedirect  : '/',
+                                           failureRedirect : '/'}));
 
 // socket.io setup
 function joinRoom(socket, data) {
@@ -124,3 +143,5 @@ app.use(function(err, req, res, next) {
 var server = http.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + server.address().port);
 });
+
+
